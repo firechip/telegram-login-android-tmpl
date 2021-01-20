@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.telegram.passport.PassportScope
 import org.telegram.passport.PassportScopeElementOne
+import org.telegram.passport.PassportScopeElementOneOfSeveral
 import org.telegram.passport.TelegramPassport
-import java.util.*
+import java.util.UUID
+
 
 class MainActivity : AppCompatActivity() {
     private val payload: String = UUID.randomUUID().toString()
@@ -25,25 +27,39 @@ class MainActivity : AppCompatActivity() {
             val req = TelegramPassport.AuthRequest()
             req.botID = 1549037203
             req.nonce = payload
-            req.publicKey="-----BEGIN PUBLIC KEY-----\n"+
-                    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0oM0cQphLzDEHuShhvbT\n"+
-                    "/OfqEyflDs5+Wn6kfg3ay6KIo85B5ScAFyECrIBK/A98AJ/3BxIDoVkUaXGUldB0\n"+
-                    "zTkOUQIIYZSP3cTdu75O0Nd6svSNVP56t+Ii3RSv4M6MLOPF0J3S5WFbb22DG2VV\n"+
-                    "ndLMfQlp/wxMtPXVM2KPWxOwx1PfY+E+f9U0GLo7BOWD7Aj4h/AHF3JsINBgLFyz\n"+
-                    "3BQf2a4p1sl+tIX9ke3BVLFLmuQNL2WJNpQajbb+Oz18y4VmJOc9uncQDe/22dWo\n"+
-                    "83Qcsvw2zqF92awaVRSEHMMOW98SOazO9Bz5UYs8wJ2OPm/z4ZiSlsXk7Z6D8n82\n"+
-                    "7QIDAQAB\n"+
+            req.publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+                    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0oM0cQphLzDEHuShhvbT\n" +
+                    "/OfqEyflDs5+Wn6kfg3ay6KIo85B5ScAFyECrIBK/A98AJ/3BxIDoVkUaXGUldB0\n" +
+                    "zTkOUQIIYZSP3cTdu75O0Nd6svSNVP56t+Ii3RSv4M6MLOPF0J3S5WFbb22DG2VV\n" +
+                    "ndLMfQlp/wxMtPXVM2KPWxOwx1PfY+E+f9U0GLo7BOWD7Aj4h/AHF3JsINBgLFyz\n" +
+                    "3BQf2a4p1sl+tIX9ke3BVLFLmuQNL2WJNpQajbb+Oz18y4VmJOc9uncQDe/22dWo\n" +
+                    "83Qcsvw2zqF92awaVRSEHMMOW98SOazO9Bz5UYs8wJ2OPm/z4ZiSlsXk7Z6D8n82\n" +
+                    "7QIDAQAB\n" +
                     "-----END PUBLIC KEY-----"
-
             req.scope = PassportScope(
-                    PassportScopeElementOne(PassportScope.PERSONAL_DETAILS).withNativeNames(),
+                    // PassportScopeElementOneOfSeveral(PassportScope.PASSPORT, PassportScope.IDENTITY_CARD).withSelfie(),
+                    // PassportScopeElementOne(PassportScope.PERSONAL_DETAILS).withNativeNames(),
+                    // PassportScope.DRIVER_LICENSE,
+                    // PassportScope.ADDRESS,
+                    // PassportScope.ADDRESS_DOCUMENT,
+                    PassportScope.PERSONAL_DETAILS,
+                    PassportScope.PASSPORT,
+                    // PassportScope.IDENTITY_CARD,
                     PassportScope.PHONE_NUMBER,
-                    PassportScope.DRIVER_LICENSE
+                    PassportScope.EMAIL,
+                    // PassportScope.TEMPORARY_REGISTRATION,
+                    // PassportScope.PASSPORT_REGISTRATION,
+                    // PassportScope.RENTAL_AGREEMENT,
+                    // PassportScope.BANK_STATEMENT,
+                    // PassportScope.UTILITY_BILL,
+                    // PassportScope.ADDRESS,
+                    // PassportScope.INTERNAL_PASSPORT
             )
             val tgPassportResult = 352 // this can be any integer less than 0xFFFF
             TelegramPassport.request(this@MainActivity, req, tgPassportResult)
         }
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable("payload", payload)
